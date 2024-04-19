@@ -1,0 +1,128 @@
+import { useTaskStore } from "@/stores/taskStorage";
+import { CardColor } from "./CardColor";
+import { useState, FormEvent } from "react";
+import { v4 as uuidv4 } from "uuid"; //Libreria para crear un ID unico
+
+function FormNewTask() {
+  const [nameTask, setName] = useState<string>("");
+  const [descriptionTask, setDescription] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const { addTask } = useTaskStore();
+
+  const manejarBoton = (evento: FormEvent) => {
+    evento.preventDefault(); //Evita que se vuelva a recargar la página
+    if (
+      nameTask.trim() !== "" &&
+      descriptionTask.trim() !== "" &&
+      selectedColor !== ""
+    ) {
+      const idTask = uuidv4(); // Verificando si no son cadenas vacias
+      addTask({
+        idTask,
+        nameTask,
+        descriptionTask,
+        selectedColor,
+        completedTask: false,
+      });
+
+      // Limpiar los campos después de agregar una nueva tarea
+      setName("");
+      setDescription("");
+      setSelectedColor("");
+    }
+  };
+  return (
+    <form
+      className="bg-purple-200 justify-center p-2 rounded shadow-xl"
+      onSubmit={manejarBoton}
+    >
+      <h1 className="font-bold text-center text-xl py-2">Nueva Tarea</h1>
+      <div className="flex">
+        <div className="w-5/6 space-y-2 justify-center">
+          {/*Primer input para escribir el nombre de la tarea*/}
+          <input
+            className="placeholder:text-slate-400 block bg-white w-full m-1 border border-slate-300 rounded-md py-2 pl-5 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+            placeholder="Nombre de tu nueva tarea"
+            type="text"
+            name="nameTask"
+            value={nameTask}
+            onChange={(evento) => setName(evento.target.value)} //Para actualizar el valor del input
+          />
+          {/*Segundo input para escribir la descripción de la tarea*/}
+          <input
+            className="placeholder:text-slate-400 block bg-white w-full m-1 border border-slate-300 rounded-md py-2 pl-5 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+            placeholder="Descripción de tu nueva tarea"
+            type="text"
+            name="descriptionTask"
+            value={descriptionTask}
+            onChange={(evento) => setDescription(evento.target.value)}
+          />
+        </div>
+        <button
+          className="px-3 ml-5 rounded-md bg-purple-400 border-2 border-purple-600 text-3xl font-bold hover:bg-purple-500 hover:text-white"
+          type="submit"
+        >
+          +
+        </button>
+      </div>
+      <h1 className="font-bold m-1 py-1 pl-1 text-base">Card Color</h1>
+      {/*El usuario podrá elegir el color de la tarjeta para la nueva tarea*/}
+      <div className="justify-center flex">
+        <CardColor
+          className="bg-green-200"
+          onClick={() => setSelectedColor("bg-green-200")}
+          seleccion={selectedColor}
+        />
+
+        <CardColor
+          className="bg-fuchsia-300"
+          onClick={() => setSelectedColor("bg-fuchsia-300")}
+          seleccion={selectedColor}
+        />
+
+        <CardColor
+          className="bg-red-200"
+          onClick={() => setSelectedColor("bg-red-200")}
+          seleccion={selectedColor}
+        />
+
+        <CardColor
+          className="bg-sky-200"
+          onClick={() => setSelectedColor("bg-sky-200")}
+          seleccion={selectedColor}
+        />
+
+        <CardColor
+          className="bg-yellow-200"
+          onClick={() => setSelectedColor("bg-yellow-200")}
+          seleccion={selectedColor}
+        />
+
+        <CardColor
+          className="bg-lime-300"
+          onClick={() => setSelectedColor("bg-lime-300")}
+          seleccion={selectedColor}
+        />
+
+        <CardColor
+          className="bg-cyan-300"
+          onClick={() => setSelectedColor("bg-cyan-300")}
+          seleccion={selectedColor}
+        />
+
+        <CardColor
+          className="bg-blue-300"
+          onClick={() => setSelectedColor("bg-blue-300")}
+          seleccion={selectedColor}
+        />
+
+        <CardColor
+          className="bg-red-300"
+          onClick={() => setSelectedColor("bg-red-300")}
+          seleccion={selectedColor}
+        />
+      </div>
+    </form>
+  );
+}
+export default FormNewTask;
