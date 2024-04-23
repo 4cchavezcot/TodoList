@@ -57,7 +57,7 @@ function FormNewTask() {
             placeholder="Nombre de tu nueva tarea"
           />
           {errors.nameTask && (
-            <span className="text-xs pl-2 text-red-700 font-bold">
+            <span className="text-xs pl-2 text-red-700 font-bold dark:text-red-500">
               Este campo es requerido
             </span>
           )}
@@ -71,7 +71,7 @@ function FormNewTask() {
             placeholder="Descripción de tu nueva tarea"
           />
           {errors.descriptionTask && (
-            <span className="text-xs pl-2 text-red-700 font-bold">
+            <span className="text-xs pl-2 text-red-700 font-bold dark:text-red-500">
               Este campo es requerido
             </span>
           )}
