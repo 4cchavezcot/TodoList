@@ -23,7 +23,7 @@ function Tasks({ task }: TareaProps) {
       {/* El background es depende del color seleccionado de la card color */}
       <div className="pl-4 w-full py-2">
         <p
-          className={cn("text-lg font-mono", {
+          className={cn("text-lg font-mono dark:text-black", {
             "line-through": task.completedTask,
           })}
         >

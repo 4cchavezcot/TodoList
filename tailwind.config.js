@@ -72,7 +72,8 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       backgroundImage: theme => ({
-        'imagen-fondo': "url('./assets/fondo1.jpg')",
+        'imagen-fondo-light': "url('src/assets/fondo1.jpg')",
+        'imagen-fondo-dark': "url('src/assets/fondo5.jpg')",
       })
     },
   },

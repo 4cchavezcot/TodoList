@@ -13,8 +13,8 @@ export function CardColor(props: CardColorProps) {
     <div
       className={cn(
         `w-10 md:w-11 h-11 md:rounded-full border-4 border-gray-200 md:m-1 
-        hover:border-white ${className}`,
-        seleccion === className && "border-white"
+        hover:border-white dark:border-zinc-600 ${className}`,
+        seleccion === className && "border-white dark:border-zinc-300"
       )}
       onClick={props.onClick}
       {...rest}

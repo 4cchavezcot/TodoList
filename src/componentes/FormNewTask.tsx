@@ -1,72 +1,90 @@
 import { useTaskStore } from "@/stores/taskStorage";
 import { CardColor } from "./CardColor";
-import { useState, FormEvent } from "react";
-import { v4 as uuidv4 } from "uuid"; //Libreria para crear un ID unico
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { useForm } from "react-hook-form";
+import { useToast } from "./ui/use-toast";
+
+interface FormInputs {
+  nameTask: string;
+  descriptionTask: string;
+  selectedColor: string;
+}
 
 function FormNewTask() {
-  const [nameTask, setName] = useState<string>("");
-  const [descriptionTask, setDescription] = useState<string>("");
-  const [selectedColor, setSelectedColor] = useState<string>("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormInputs>();
   const { addTask } = useTaskStore();
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const { toast } = useToast();
 
-  const manejarBoton = (evento: FormEvent) => {
-    evento.preventDefault(); //Evita que se vuelva a recargar la página
-    if (
-      nameTask.trim() !== "" &&
-      descriptionTask.trim() !== "" &&
-      selectedColor !== ""
-    ) {
-      const idTask = uuidv4(); // Verificando si no son cadenas vacias
-      addTask({
-        idTask,
-        nameTask,
-        descriptionTask,
-        selectedColor,
-        completedTask: false,
-      });
+  const onSubmit = handleSubmit((data) => {
+    const { nameTask, descriptionTask } = data;
+    const idTask = uuidv4();
+    addTask({
+      idTask,
+      nameTask,
+      descriptionTask,
+      selectedColor,
+      completedTask: false,
+    });
+    reset();
+    setSelectedColor("");
+    toast({
+      description: "Su tarea ha sido registrada.",
+    });
+  });
 
-      // Limpiar los campos después de agregar una nueva tarea
-      setName("");
-      setDescription("");
-      setSelectedColor("");
-    }
-  };
   return (
     <form
-      className="bg-purple-200 justify-center p-2 rounded shadow-xl"
-      onSubmit={manejarBoton}
+      className="bg-purple-200 dark:bg-amber-950 justify-center p-2 rounded shadow-xl"
+      onSubmit={onSubmit}
     >
       <h1 className="font-bold text-center text-xl py-2">Nueva Tarea</h1>
       <div className="flex">
         <div className="w-5/6 space-y-2 justify-center">
           {/*Primer input para escribir el nombre de la tarea*/}
           <input
+            {...register("nameTask", {
+              required: true,
+            })}
+            type="text"
             className="placeholder:text-slate-400 block bg-white w-full m-1 border border-slate-300 rounded-md py-2 pl-5 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
             placeholder="Nombre de tu nueva tarea"
-            type="text"
-            name="nameTask"
-            value={nameTask}
-            onChange={(evento) => setName(evento.target.value)} //Para actualizar el valor del input
           />
+          {errors.nameTask && (
+            <span className="text-xs pl-2 text-red-700 font-bold">
+              Este campo es requerido
+            </span>
+          )}
           {/*Segundo input para escribir la descripción de la tarea*/}
           <input
+            {...register("descriptionTask", {
+              required: true,
+            })}
+            type="text"
             className="placeholder:text-slate-400 block bg-white w-full m-1 border border-slate-300 rounded-md py-2 pl-5 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
             placeholder="Descripción de tu nueva tarea"
-            type="text"
-            name="descriptionTask"
-            value={descriptionTask}
-            onChange={(evento) => setDescription(evento.target.value)}
           />
+          {errors.descriptionTask && (
+            <span className="text-xs pl-2 text-red-700 font-bold">
+              Este campo es requerido
+            </span>
+          )}
         </div>
         <button
-          className="px-3 ml-5 rounded-md bg-purple-400 border-2 border-purple-600 text-3xl font-bold hover:bg-purple-500 hover:text-white"
+          className="px-3 ml-5 rounded-md bg-purple-400 dark:bg-amber-600 border-2 border-purple-600 dark:border-amber-600 text-3xl font-bold hover:bg-purple-500 hover:text-white"
           type="submit"
         >
           +
         </button>
       </div>
       <h1 className="font-bold m-1 py-1 pl-1 text-base">Card Color</h1>
-      {/*El usuario podrá elegir el color de la tarjeta para la nueva tarea*/}
+      {/* El usuario podrá elegir el color de la tarjeta para la nueva tarea */}
       <div className="justify-center flex">
         <CardColor
           className="bg-green-200"
